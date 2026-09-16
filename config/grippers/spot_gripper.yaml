@@ -1,0 +1,43 @@
+_target_: graspsampling.hands.URDFHand
+
+contact_points:
+  - link_name: arm_link_fngr
+  - link_name: arm_link_jaw
+
+physics_parameters:
+  file_name: "assets/spot/spot_gripper.urdf"
+  # arm_f1x convention: lower=-1.5708 (open), upper=0.0 (closed)
+  default_config: [0.0, -1.5708]  # [arm_wr1 neutral, arm_f1x fully open]
+  options:
+    flip_visual_attachments: False
+  dof_properties:
+    driveMode: [1, 2]
+    stiffness: [100.0, 16.0]
+    damping: [2.0, 0.32]
+    effort: 30.3
+  policy:
+    closing_velocity: []
+    gripper_type: [spot_gripper]
+    shake_rot_axis: [0, 1, 0]
+
+# maximum finger aperture at arm_f1x = -pi/2
+width: 0.0790  # estimated; does not affect filter_colliding_grasps
+
+# distance from arm_link_wr1 origin to TCP along the +X axis (URDF frame),
+# which maps to +Z in graspgen convention after the offset transform below.
+#
+# derivation:
+#   graspgen places wr1 at: contact_point - depth_franka * approach   (depth_franka = 0.1034 m)
+#   tcp then ends up at:    contact_point + (depth_spot_tcp - depth_franka) * approach
+#   empirical tcp correction applied in apply_graspgen_to_spot_correction: 0.087 m
+#   → depth_spot_tcp = 0.1034 + 0.087 = 0.1904 m
+depth: 0.1904
+
+# the urdf approach direction is along +X of arm_link_wr1.
+# graspgen convention uses +Z as approach direction.
+# a +90° rotation around Y maps urdf +X → graspgen +Z.
+# quaternion [x, y, z, w] = [0, sin(45°), 0, cos(45°)] = [0, 0.7071, 0, 0.7071]
+transform_offset_from_asset_to_graspgen_convention: [[0.0, 0.0, 0.0], [0.0, 0.7071067811865476, 0.0, 0.7071067811865476]]
+
+# spot gripper is asymmetric (one moveable finger + one fixed jaw)
+symmetric_antipodal: False

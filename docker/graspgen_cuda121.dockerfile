@@ -24,7 +24,7 @@ RUN pip install pyrender==0.1.45 pyglet==2.1.6 && pip install PyOpenGL==3.1.5
 
 # Install pointnet2 modules
 COPY pointnet2_ops pointnet2_ops
-RUN pip install ./pointnet2_ops
+RUN pip install --no-build-isolation ./pointnet2_ops
 
 # Diffusion dependencies
 RUN pip install diffusers==0.11.1 timm==1.0.15

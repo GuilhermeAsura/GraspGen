@@ -88,3 +88,10 @@ logs/*
 cache/
 misc/*
 data/*
+GraspGenModels/
+pointnet2_ops/build/
+pointnet2_ops/build/
+drill_with_grasps.usd
+output_grasps.yaml
+drill_grasp.yaml
+assets/

@@ -134,3 +134,5 @@ find-links = ["https://data.pyg.org/whl/torch-2.1.0+cu121.html"]
 # Build dependencies for packages that need special build requirements
 [tool.uv.extra-build-dependencies]
 sharedarray = ["setuptools>=45,<78"]
+torch-cluster = ["torch"]
+torch-scatter = ["torch"]

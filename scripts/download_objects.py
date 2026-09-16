@@ -342,8 +342,11 @@ def download_objaverse_meshes(
         print(f"Error downloading objects: {e}")
         return
 
-    # Prepare data for multiprocessing
-    uuid_obj_pairs = [(uuid, objects[uuid]) for uuid in uuids_to_download]
+    # Prepare data for multiprocessing (skip objects not returned by objaverse)
+    uuid_obj_pairs = [(uuid, objects[uuid]) for uuid in uuids_to_download if uuid in objects]
+    skipped = len(uuids_to_download) - len(uuid_obj_pairs)
+    if skipped:
+        print(f"Warning: {skipped} objects were not found in objaverse and will be skipped.")
 
     # Determine number of processes to use
     num_processes = max(1, cpu_count() - unused_cpu_count)
